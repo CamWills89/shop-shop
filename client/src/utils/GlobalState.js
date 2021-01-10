@@ -12,6 +12,8 @@ const { Provider } = StoreContext;
 const StoreProvider = ({ value = [], ...props }) => {
   const [state, dispatch] = useProductReducer({
     products: [],
+    cart: [],
+    cartOpen: false,
     categories: [],
     currentCategory: "",
   });
@@ -21,7 +23,7 @@ const StoreProvider = ({ value = [], ...props }) => {
   return <Provider value={[state, dispatch]} {...props} />;
 };
 
-// When we execute this function from within a component, we will receive 
+// When we execute this function from within a component, we will receive
 // the[state, dispatch] data our StoreProvider provider manages for us
 const useStoreContext = () => {
   return useContext(StoreContext);

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import ProductList from "../components/ProductList";
 import CategoryMenu from "../components/CategoryMenu";
+import Cart from "../components/Cart";
 
 const Home = () => {
   // const [currentCategory, setCategory] = useState("");
@@ -11,6 +12,7 @@ const Home = () => {
       <ProductList currentCategory={currentCategory} /> */}
       <CategoryMenu />
       <ProductList />
+      <Cart />
     </div>
   );
 };
