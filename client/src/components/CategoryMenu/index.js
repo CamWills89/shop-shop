@@ -1,19 +1,54 @@
-import React from "react";
-import { useQuery } from '@apollo/react-hooks';
+import React, { useEffect } from "react";
+import { useQuery } from "@apollo/react-hooks";
+import {
+  UPDATE_CATEGORIES,
+  UPDATE_CURRENT_CATEGORY,
+} from "../../utils/actions";
 import { QUERY_CATEGORIES } from "../../utils/queries";
+import { useStoreContext } from "../../utils/GlobalState";
 
-function CategoryMenu({ setCategory }) {
+function CategoryMenu() {
+  // const { data: categoryData } = useQuery(QUERY_CATEGORIES);
+  // const categories = categoryData?.categories || [];
+  
+  // immediately execute the useStoreContext() function to retrieve the current
+  // global state object and the dipatch() method to update state.
+  const [state, dispatch] = useStoreContext();
+
+  //we only need the categories here, so we destructure it out of our global state
+  const { categories } = state;
+
+  // useQuery is asynchronous, so it wont be done getting data on page load so we need
+  // useEffect to check when useQuery is done and then dispatch data to global state
   const { data: categoryData } = useQuery(QUERY_CATEGORIES);
-  const categories = categoryData?.categories || [];
+
+  useEffect(() => {
+    // if categoryData exists or has changed from the response of useQuery, then run dispatch()
+    if (categoryData) {
+      // execute our dispatch function with our action object indicating the type of action
+      // and the data to set our state for categories to
+      dispatch({
+        type: UPDATE_CATEGORIES,
+        categories: categoryData.categories,
+      });
+    }
+  }, [categoryData, dispatch]);
+
+  const handleClick = (id) => {
+    dispatch({
+      type: UPDATE_CURRENT_CATEGORY,
+      currentCategory: id,
+    });
+  };
 
   return (
     <div>
       <h2>Choose a Category:</h2>
-      {categories.map(item => (
+      {categories.map((item) => (
         <button
           key={item._id}
           onClick={() => {
-            setCategory(item._id);
+            handleClick(item._id);
           }}
         >
           {item.name}
